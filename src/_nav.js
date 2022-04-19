@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import CIcon from '@coreui/icons-react'
 import { cilDrop, cilLibraryAdd, cilPaperclip, cilLayers, cilSpeedometer } from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
-import axios from 'axios'
+import { CNavItem, CNavTitle } from '@coreui/react'
 
 const _nav = [
   {
@@ -24,19 +23,19 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Dispensation',
-    to: '/theme/colors',
+    to: '/dispensation',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Stock',
-    to: '/theme/colors',
+    to: '/stock',
     icon: <CIcon icon={cilLibraryAdd} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Reports',
-    to: '/theme/colors',
+    to: '/reports',
     icon: <CIcon icon={cilPaperclip} customClassName="nav-icon" />,
   },
   {

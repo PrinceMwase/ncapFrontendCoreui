@@ -24,8 +24,8 @@ function Login() {
   const authstatus = useSelector((state) => state.authApi.authenticated)
 
   // const { push } = Navigate()
-  let [username, setUsername] = useState('')
-  let [password, setPassword] = useState('')
+  let [username, setUsername] = useState('goonie')
+  let [password, setPassword] = useState('a')
 
   const [login, { isLoading }] = useLoginMutation()
 

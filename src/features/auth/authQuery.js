@@ -1,25 +1,7 @@
-import { createApi, fetchBaseQuery, BaseQueryFn } from '@reduxjs/toolkit/query/react'
-import axios from 'axios'
-import { useDispatch } from 'react-redux'
-import { signin } from './authenticationSlice'
-import { Navigate } from 'react-router-dom'
+import { createApi } from '@reduxjs/toolkit/query/react'
 
-const axiosBaseQuery =
-  ({ baseUrl } = { baseUrl: '' }) =>
-  async ({ url, method, data }) => {
-    try {
-      const result = await axios({ url: baseUrl + url, method, data })
-      return { data: result.data }
-    } catch (axiosError) {
-      let err = axiosError
-      return {
-        error: {
-          status: err.response?.status,
-          data: err.response?.data || err.message,
-        },
-      }
-    }
-  }
+import { signin } from './authenticationSlice'
+import axiosBaseQuery from 'src/utils/useAxios'
 
 export const getAuth = createApi({
   reducerPath: 'getAuth',
@@ -27,20 +9,15 @@ export const getAuth = createApi({
   endpoints(build) {
     return {
       login: build.mutation({
-        query: ({ data }) => ({ url: '/ncapp/login', method: 'post', data: data }),
-        async onCacheEntryAdded(
-          arg,
-          {
-            dispatch,
-            getState,
-            extra,
-            requestId,
-            cacheEntryRemoved,
-            cacheDataLoaded,
-            getCacheEntry,
-          },
-        ) {
+        query: ({ data }) => ({
+          url: '/ncapp/login',
+          method: 'post',
+          data: data,
+        }),
+        async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
+          console.log('prince')
           cacheDataLoaded.then((response) => {
+            console.log('prince2')
             dispatch(signin(response.data))
           })
         },
