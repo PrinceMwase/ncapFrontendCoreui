@@ -33,28 +33,32 @@ const Dashboard = () => {
   const currentClinic = useSelector((state) => state.SupportGroupApiStore.name)
   const filteredPatients = useSelector((state) => state.PatientsGroupApiStore.patients)
   const filteredPatientsCheck = useSelector((state) => state.PatientsGroupApiStore.filterd)
-
+  const { data, isLoading } = useGetSupportGroupsQuery()
+  const patients = useGetPatientsQuery()
   const dispatch = useDispatch()
   const [getPatientBySupportGroup, { isSuccess }] = useGetPatientBySupportGroupMutation()
   const progressExample = [
-    { title: 'Visits', value: '29.703 Users', percent: 40, color: 'success' },
-    { title: 'Unique', value: '24.093 Users', percent: 20, color: 'info' },
-    { title: 'Pageviews', value: '78.706 Views', percent: 60, color: 'warning' },
-    { title: 'New Users', value: '22.123 Users', percent: 80, color: 'danger' },
+    { title: 'Males', value: '29.703 Users', percent: 40, color: 'success' },
+    { title: 'Females', value: '24.093 Users', percent: 20, color: 'info' },
+    {
+      title: isLoading ? 'loading...' : currentClinic ? currentClinic : 'Support Group',
+      value: '78.706 Views',
+      percent: 60,
+      color: 'warning',
+    },
+    { title: 'Active', value: '22.123 Users', percent: 80, color: 'danger' },
     { title: 'Bounce Rate', value: 'Average Rate', percent: 40.15, color: 'primary' },
   ]
-  const { data, isLoading } = useGetSupportGroupsQuery()
-  const patients = useGetPatientsQuery()
 
   const currentPatients = (patient) => (
     <CTableRow key={patient.id}>
       <CTableHeaderCell scope="row">{patient.id}</CTableHeaderCell>
 
-      <CTableDataCell>{patient.first_name}</CTableDataCell>
+      <CTableDataCell>{patient.uuid}</CTableDataCell>
 
       <CTableDataCell>{patient.sex}</CTableDataCell>
 
-      <CTableDataCell>{patient.date_of_bith}</CTableDataCell>
+      <CTableDataCell>{patient.date_of_birth}</CTableDataCell>
     </CTableRow>
   )
   return (
@@ -68,12 +72,12 @@ const Dashboard = () => {
               </h4>
               <div className="small text-medium-emphasis">January - July 2021</div>
             </CCol>
-            <CCol sm={7} className="d-none d-md-block">
-              <CButton color="primary" className="float-end">
+            <CCol sm={7} className="d-md-block">
+              <CButton color="primary" className="float-end" size="sm">
                 <CIcon icon={cilCloudDownload} />
               </CButton>
               <CDropdown className="float-end me-3">
-                <CDropdownToggle href="#" color="secondary">
+                <CDropdownToggle href="#" color="secondary" size="sm">
                   {isLoading ? 'loading...' : currentClinic ? currentClinic : 'Support Group'}
                 </CDropdownToggle>
 
