@@ -10,7 +10,7 @@ export const getAuth = createApi({
     return {
       login: build.mutation({
         query: ({ data }) => ({
-          url: '/ncapp/login',
+          url: 'login/login/',
           method: 'post',
           data: data,
         }),

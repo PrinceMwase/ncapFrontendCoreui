@@ -9,7 +9,6 @@ export const supportGroupApi = createApi({
     return {
       getSupportGroups: build.query({
         query: () => ({ url: '/support_group/', method: 'get' }),
-        async onCacheEntryAdded({ cacheDataLoaded }) {},
       }),
     }
   },
