@@ -50,33 +50,30 @@ const Dashboard = () => {
     { title: 'Bounce Rate', value: 'Average Rate', percent: 40.15, color: 'primary' },
   ]
 
-  const currentPatients = (patient) => (
-    <CTableRow key={patient.id}>
-      <CTableHeaderCell scope="row">{patient.id}</CTableHeaderCell>
+  const currentPatients = (patient) => {
+    const gotVisit = patient.clinic_set && patient.clinic_set.length > 0
 
-      <CTableDataCell>{patient.uuid}</CTableDataCell>
+    const latestClinic = (collumn) => {
+      if (gotVisit) return patient.clinic_set[0][collumn]
+      else return null
+    }
 
-      <CTableDataCell>{patient.sex}</CTableDataCell>
+    return (
+      <CTableRow key={patient.id}>
+        <CTableHeaderCell scope="row">{patient.id}</CTableHeaderCell>
 
-      <CTableDataCell>{patient.date_of_birth}</CTableDataCell>
+        <CTableDataCell>{patient.uuid}</CTableDataCell>
 
-      <CTableDataCell>
-        {patient.clinic_set && patient.clinic_set.length > 0
-          ? patient.clinic_set[0].visit_date
-          : null}
-      </CTableDataCell>
-      <CTableDataCell>
-        {patient.clinic_set && patient.clinic_set.length > 0
-          ? patient.clinic_set[0].visit_date
-          : null}
-      </CTableDataCell>
-      <CTableDataCell>
-        {patient.clinic_set && patient.clinic_set.length > 0
-          ? patient.clinic_set[0].next_appointment
-          : null}
-      </CTableDataCell>
-    </CTableRow>
-  )
+        <CTableDataCell>{patient.sex}</CTableDataCell>
+
+        <CTableDataCell>{patient.date_of_birth}</CTableDataCell>
+
+        <CTableDataCell>{latestClinic('visit_date')}</CTableDataCell>
+        <CTableDataCell>{latestClinic('visit_date')}</CTableDataCell>
+        <CTableDataCell>{latestClinic('next_appointment')}</CTableDataCell>
+      </CTableRow>
+    )
+  }
   return (
     <>
       <CCard className="mb-4">
