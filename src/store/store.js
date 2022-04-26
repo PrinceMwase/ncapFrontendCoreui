@@ -7,6 +7,7 @@ import SupportGroupApiStoreReducer, { supportGroupApiStore } from './slices/supp
 import { patientApi } from 'src/features/auth/patient'
 import { patientsApiStore } from './slices/patientSlice'
 import coreUiReducer, { coreUi } from 'src/store'
+import { stockApi } from 'src/features/auth/stockQuery'
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     [patientsApiStore.name]: patientsApiStore.reducer,
     [getAuth.reducerPath]: getAuth.reducer,
     [supportGroupApi.reducerPath]: supportGroupApi.reducer,
+    [stockApi.reducerPath]: stockApi.reducer,
     [patientApi.reducerPath]: patientApi.reducer,
     [coreUi.name]: coreUiReducer,
   },
@@ -22,7 +24,8 @@ export const store = configureStore({
     getDefaultMiddleware()
       .concat(getAuth.middleware)
       .concat(supportGroupApi.middleware)
-      .concat(patientApi.middleware),
+      .concat(patientApi.middleware)
+      .concat(stockApi.middleware),
 })
 
 setupListeners(store.dispatch)
