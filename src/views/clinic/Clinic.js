@@ -59,6 +59,22 @@ const Dashboard = () => {
       <CTableDataCell>{patient.sex}</CTableDataCell>
 
       <CTableDataCell>{patient.date_of_birth}</CTableDataCell>
+
+      <CTableDataCell>
+        {patient.clinic_set && patient.clinic_set.length > 0
+          ? patient.clinic_set[0].visit_date
+          : null}
+      </CTableDataCell>
+      <CTableDataCell>
+        {patient.clinic_set && patient.clinic_set.length > 0
+          ? patient.clinic_set[0].visit_date
+          : null}
+      </CTableDataCell>
+      <CTableDataCell>
+        {patient.clinic_set && patient.clinic_set.length > 0
+          ? patient.clinic_set[0].next_appointment
+          : null}
+      </CTableDataCell>
     </CTableRow>
   )
   return (
@@ -102,7 +118,7 @@ const Dashboard = () => {
           </CRow>
         </CCardBody>
         {/* insert table here */}
-        <CTable borderless>
+        <CTable borderless hover responsive>
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">#</CTableHeaderCell>
@@ -113,7 +129,9 @@ const Dashboard = () => {
 
               <CTableHeaderCell scope="col">Age</CTableHeaderCell>
 
-              <CTableHeaderCell scope="col">vl</CTableHeaderCell>
+              <CTableHeaderCell scope="col">last vl regimen</CTableHeaderCell>
+              <CTableHeaderCell scope="col">last appointment</CTableHeaderCell>
+              <CTableHeaderCell scope="col">next appointment</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
 
