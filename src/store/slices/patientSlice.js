@@ -6,6 +6,8 @@ export const patientsApiStore = createSlice({
   initialState: {
     patients: null,
     filterd: false,
+    next: null,
+    previous: null,
   },
 
   reducers: {
@@ -15,9 +17,13 @@ export const patientsApiStore = createSlice({
     setGroupFilter: (state) => {
       state.filterd = true
     },
+    setPagination: (state, action) => {
+      state.next = action.payload.next
+      state.previous = action.payload.previous
+    },
   },
 })
 
-export const { setPatients, setGroupFilter } = patientsApiStore.actions
+export const { setPatients, setGroupFilter, setPagination } = patientsApiStore.actions
 
 export default patientsApiStore.reducer

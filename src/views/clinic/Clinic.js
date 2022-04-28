@@ -18,6 +18,8 @@ import {
   CDropdownToggle,
   CDropdownMenu,
   CDropdownItem,
+  CPagination,
+  CPaginationItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilCloudDownload } from '@coreui/icons'
@@ -25,18 +27,27 @@ import { cilCloudDownload } from '@coreui/icons'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { setClinic } from 'src/store/slices/supportGroupSlice'
-import { useGetPatientBySupportGroupMutation, useGetPatientsQuery } from 'src/features/auth/patient'
+import {
+  useGetNextPatientsMutation,
+  useGetPatientBySupportGroupMutation,
+  useGetPatientsQuery,
+  useGetPreviousPatientsMutation,
+} from 'src/features/auth/patient'
 import { setGroupFilter } from 'src/store/slices/patientSlice'
 import { useGetSupportGroupsQuery } from 'src/features/auth/supportGroup'
 
 const Dashboard = () => {
+  useGetPatientsQuery()
   const currentClinic = useSelector((state) => state.SupportGroupApiStore.name)
   const filteredPatients = useSelector((state) => state.PatientsGroupApiStore.patients)
   const filteredPatientsCheck = useSelector((state) => state.PatientsGroupApiStore.filterd)
+  const nextPatients = useSelector((state) => state.PatientsGroupApiStore.next)
+  const previousPatients = useSelector((state) => state.PatientsGroupApiStore.previous)
   const { data, isLoading } = useGetSupportGroupsQuery()
-  const patients = useGetPatientsQuery()
   const dispatch = useDispatch()
   const [getPatientBySupportGroup, { isSuccess }] = useGetPatientBySupportGroupMutation()
+  const [getNextPatients] = useGetNextPatientsMutation()
+  const [getPreviousPatients] = useGetPreviousPatientsMutation()
   const progressExample = [
     { title: 'Males', value: '29.703 Users', percent: 40, color: 'success' },
     { title: 'Females', value: '24.093 Users', percent: 20, color: 'info' },
@@ -59,7 +70,12 @@ const Dashboard = () => {
     }
 
     return (
-      <CTableRow key={patient.id}>
+      <CTableRow
+        key={patient.id}
+        onClick={() => {
+          console.log('clicked')
+        }}
+      >
         <CTableHeaderCell scope="row">{patient.id}</CTableHeaderCell>
 
         <CTableDataCell>{patient.uuid}</CTableDataCell>
@@ -86,6 +102,24 @@ const Dashboard = () => {
               <div className="small text-medium-emphasis">January - July 2021</div>
             </CCol>
             <CCol sm={7} className="d-md-block">
+              <CPagination className="justify-content-end" aria-label="Page navigation example">
+                <CPaginationItem
+                  disabled={previousPatients ? false : true}
+                  onClick={async () => {
+                    await getPreviousPatients(previousPatients)
+                  }}
+                >
+                  Previous
+                </CPaginationItem>
+                <CPaginationItem
+                  disabled={nextPatients ? false : true}
+                  onClick={async () => {
+                    await getNextPatients(nextPatients)
+                  }}
+                >
+                  Next
+                </CPaginationItem>
+              </CPagination>
               <CButton color="primary" className="float-end" size="sm">
                 <CIcon icon={cilCloudDownload} />
               </CButton>
@@ -133,8 +167,8 @@ const Dashboard = () => {
           </CTableHead>
 
           <CTableBody>
-            {patients.data && !filteredPatientsCheck
-              ? patients.data.results.map(currentPatients)
+            {filteredPatients && !filteredPatientsCheck
+              ? filteredPatients.results.map(currentPatients)
               : null}
             {isSuccess ? filteredPatients.results.map(currentPatients) : null}
           </CTableBody>

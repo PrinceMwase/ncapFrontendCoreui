@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import axios from 'axios'
-import { setPatients } from 'src/store/slices/patientSlice'
-import { setClinic } from 'src/store/slices/supportGroupSlice'
+
+import { setPatients, setPagination } from 'src/store/slices/patientSlice'
+import Paginator from 'src/utils/paginator'
 import axiosBaseQuery from 'src/utils/useAxios'
 
 /** implement rtkq for patients
@@ -17,7 +17,7 @@ export const patientApi = createApi({
         query: () => ({ url: '/patients/', method: 'get' }),
         async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
           cacheDataLoaded.then((response) => {
-            dispatch(setPatients(response.data))
+            setPatientsAndPagination(dispatch, response)
           })
         },
       }),
@@ -28,12 +28,49 @@ export const patientApi = createApi({
         }),
         async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
           cacheDataLoaded.then((response) => {
-            dispatch(setPatients(response.data))
+            setPatientsAndPagination(dispatch, response)
+          })
+        },
+      }),
+      getNextPatients: build.mutation({
+        query: (query) => ({
+          url: query,
+          method: 'get',
+        }),
+        async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
+          cacheDataLoaded.then((response) => {
+            setPatientsAndPagination(dispatch, response)
+          })
+        },
+      }),
+      getPreviousPatients: build.mutation({
+        query: (query) => ({
+          url: query,
+          method: 'get',
+        }),
+        async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
+          cacheDataLoaded.then((response) => {
+            setPatientsAndPagination(dispatch, response)
           })
         },
       }),
     }
+
+    /** Adds pagination to global patients store
+     * @param dispatch - disptach method for the store
+     * @param response - response data with previous and next keys
+     */
+    function setPatientsAndPagination(dispatch, response) {
+      dispatch(setPatients(response.data))
+
+      dispatch(setPagination(Paginator(response.data)))
+    }
   },
 })
 
-export const { useGetPatientsQuery, useGetPatientBySupportGroupMutation } = patientApi
+export const {
+  useGetPatientsQuery,
+  useGetPatientBySupportGroupMutation,
+  useGetNextPatientsMutation,
+  useGetPreviousPatientsMutation,
+} = patientApi
