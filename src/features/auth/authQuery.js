@@ -15,9 +15,7 @@ export const getAuth = createApi({
           data: data,
         }),
         async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
-          console.log('prince')
           cacheDataLoaded.then((response) => {
-            console.log('prince2')
             dispatch(signin(response.data))
           })
         },

@@ -9,6 +9,8 @@ import {
   CCardFooter,
   CCardHeader,
   CCol,
+  CPagination,
+  CPaginationItem,
   CProgress,
   CRow,
   CTable,
@@ -54,20 +56,17 @@ import avatar6 from 'src/assets/images/avatars/6.jpg'
 import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import axios from 'axios'
-import { useGetDrugQuery, useGetStockQuery } from 'src/features/auth/stockQuery'
+import {
+  useGetDrugQuery,
+  useGetDrugStockMutation,
+  useGetStockQuery,
+} from 'src/features/auth/stockQuery'
+import { useSelector } from 'react-redux'
 
 const Stock = () => {
   const { data, isLoading } = useGetStockQuery()
-
-  const progressGroupExample1 = [
-    { title: 'Monday', value1: 34, value2: 78 },
-    { title: 'Tuesday', value1: 56, value2: 94 },
-    { title: 'Wednesday', value1: 12, value2: 67 },
-    { title: 'Thursday', value1: 43, value2: 91 },
-    { title: 'Friday', value1: 22, value2: 73 },
-    { title: 'Saturday', value1: 53, value2: 82 },
-    { title: 'Sunday', value1: 9, value2: 69 },
-  ]
+  const currDrug = useSelector((state) => state.DrugStockApiStore.drug)
+  const [getDrugStock] = useGetDrugStockMutation()
 
   const progressGroupExample2 = [
     { title: 'Male', icon: cilUser, value: 53 },
@@ -199,17 +198,27 @@ const Stock = () => {
                   <hr className="mt-0" />
                   {data
                     ? data.results.map((drug, index) => (
-                        <div className="progress-group mb-4" key={index}>
+                        <div
+                          className="progress-group mb-4"
+                          key={index}
+                          onClick={() => {
+                            getDrugStock(drug.id)
+                          }}
+                        >
                           <div className="progress-group-prepend">
-                            <span className="text-medium-emphasis small">{drug.fillable}</span>
+                            <span className="text-medium-emphasis small">{drug.fillable.name}</span>
                           </div>
                           <div className="progress-group-bars">
                             <CProgress thin color="info" value={parseInt(drug.count)} />
-                            <CProgress thin color="danger" value="64" />
+                            <CProgress thin color="danger" value={6} />
                           </div>
                         </div>
                       ))
                     : null}
+                  <CPagination className="justify-content-start" aria-label="Page Drug stocks">
+                    <CPaginationItem>Previous</CPaginationItem>
+                    <CPaginationItem>Next</CPaginationItem>
+                  </CPagination>
                 </CCol>
 
                 <CCol xs={12} md={6} xl={6}>
@@ -230,19 +239,16 @@ const Stock = () => {
 
                   <hr className="mt-0" />
 
-                  {progressGroupExample2.map((item, index) => (
-                    <div className="progress-group mb-4" key={index}>
+                  {currDrug ? (
+                    <div className="progress-group mb-4" key={currDrug.id}>
+                      <span>{currDrug.fillable.name}</span>
                       <div className="progress-group-header">
-                        <CIcon className="me-2" icon={item.icon} size="lg" />
-                        <span>{item.title}</span>
-                        <span className="ms-auto fw-semibold">{item.value}%</span>
-                      </div>
-                      <div className="progress-group-bars">
-                        <CProgress thin color="warning" value={item.value} />
+                        <CIcon className="me-2" icon={cilUser} size="lg" />
+                        <span>Stock</span>
+                        <span className="ms-auto fw-semibold">{currDrug.count}%</span>
                       </div>
                     </div>
-                  ))}
-
+                  ) : null}
                   <div className="mb-5"></div>
 
                   {progressGroupExample3.map((item, index) => (

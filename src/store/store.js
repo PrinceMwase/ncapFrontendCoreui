@@ -8,6 +8,7 @@ import { patientApi } from 'src/features/auth/patient'
 import { patientsApiStore } from './slices/patientSlice'
 import coreUiReducer, { coreUi } from 'src/store'
 import { stockApi } from 'src/features/auth/stockQuery'
+import { DrugStockApi } from 'src/views/stock/drugStockSlice'
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     [stockApi.reducerPath]: stockApi.reducer,
     [patientApi.reducerPath]: patientApi.reducer,
     [coreUi.name]: coreUiReducer,
+    [DrugStockApi.name]: DrugStockApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

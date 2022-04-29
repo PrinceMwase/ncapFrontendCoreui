@@ -102,9 +102,10 @@ const Dashboard = () => {
               <div className="small text-medium-emphasis">January - July 2021</div>
             </CCol>
             <CCol sm={7} className="d-md-block">
-              <CPagination className="justify-content-end" aria-label="Page navigation example">
+              <CPagination className="justify-content-end" aria-label="Page Patients">
                 <CPaginationItem
                   disabled={previousPatients ? false : true}
+                  style={previousPatients ? { cursor: 'pointer' } : null}
                   onClick={async () => {
                     await getPreviousPatients(previousPatients)
                   }}
@@ -113,6 +114,7 @@ const Dashboard = () => {
                 </CPaginationItem>
                 <CPaginationItem
                   disabled={nextPatients ? false : true}
+                  style={nextPatients ? { cursor: 'pointer' } : null}
                   onClick={async () => {
                     await getNextPatients(nextPatients)
                   }}
